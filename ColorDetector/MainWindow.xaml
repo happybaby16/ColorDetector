@@ -1,0 +1,17 @@
+﻿<Window x:Class="ColorDetector.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ColorDetector"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="150" Width="150"
+        Topmost="True"
+        WindowStyle="None" ResizeMode="NoResize">
+    <Grid>
+        <Image x:Name="imgPixcelColor" Stretch="Fill"/>
+        <Line X1="0" X2="150" Y1="75" Y2="75" Visibility="Visible" StrokeThickness="1" Stroke="Blue"/>
+        <Line Y1="0" Y2="150" X1="75" X2="75" Visibility="Visible" StrokeThickness="1" Stroke="Red"></Line>
+        <Rectangle x:Name="rctEndColor" Fill="Red" Width="40" Height="40" Margin="110,110,0,0" />
+    </Grid>
+</Window>
