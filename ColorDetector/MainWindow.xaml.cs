@@ -6,6 +6,8 @@ using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ColorDetector.Model;
+using ColorDetector.View;
+using ColorDetector.Model.Settings;
 
 namespace ColorDetector
 {
@@ -14,56 +16,103 @@ namespace ColorDetector
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static Bitmap BM = new Bitmap(Screen.PrimaryScreen.Bounds.Width / 320, Screen.PrimaryScreen.Bounds.Height / 180);
+        SettingsWindow stgsAppWindow;
+        SettingsApplication stgsApp;
+        public static Bitmap BM;
+
+        /// <summary>
+        /// Отвечает за движение окна приложения за курсором и за отрисовку контенка внутри окна (загрузка приближенной картинки)
+        /// </summary>
         public void WindowMoveToCursor(object sender, EventArgs e)
         {
             double screenHeight = SystemParameters.FullPrimaryScreenHeight;
             double screenWidth = SystemParameters.FullPrimaryScreenWidth;
-            var p = GetCursorPosition();
+            System.Windows.Point p = GetCursorPosition();
+            //Небольшое изменение координат для помещение окна прилоежния правее курсора
             this.Top = (p.Y+10);
             this.Left = (p.X+10);
-            Graphics GH = Graphics.FromImage(BM as Image);
-            GH.CopyFromScreen(Convert.ToInt32(p.X)-2, Convert.ToInt32(p.Y)-2, 0, 0, BM.Size);
-            imgPixcelColor.Source = BitmapToImageSource(BM);
-            var pixelColor = new System.Drawing.Color();
-            pixelColor = BM.GetPixel(BM.Width / 2, BM.Height / 2);
-            rctEndColor.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(pixelColor.R,pixelColor.G,pixelColor.B));
-      
+            DrawImage(p);
         }
 
+        /// <summary>
+        /// Отвечает за отрисовку контента в приложении (загрузка картинки)
+        /// </summary>
+        /// <param name="points">Координаты курсора</param>
+        private void DrawImage(System.Windows.Point points)
+        {
+            Graphics GH = Graphics.FromImage(BM as Image);
+            GH.CopyFromScreen(Convert.ToInt32(points.X) - 2, Convert.ToInt32(points.Y) - 2, 0, 0, BM.Size);
+            imgPixcelColor.Source = BitmapToImage.BitmapToImageSource(BM);
+            var pixelColor = SearchColor;
+            //Меняем цвет квадрата в правом нижнем углу, чтобы показать конечный цвет, который будет скопирован в буффер обмена
+            rctEndColor.Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(pixelColor.R, pixelColor.G, pixelColor.B));
+        }
+
+        /// <summary>
+        /// Возвращает цвет пикселя, наведённого на курсор
+        /// </summary>
+        private System.Drawing.Color SearchColor
+        {
+            get=>BM.GetPixel(BM.Width / 2, BM.Height / 2);
+        }
+
+        /// <summary>
+        /// Отвечает за копирование цвета в буффер обмена
+        /// </summary>
         public void IsMouseLClick(object sender, EventArgs e)
         {
-            var pixelColor = new System.Drawing.Color();
-            pixelColor = BM.GetPixel(BM.Width/2, BM.Height/2);
-            System.Windows.Clipboard.SetText($"{pixelColor.R},{pixelColor.G},{pixelColor.B}");
-
+            var pixelColor = SearchColor;
+            if (stgsApp.IsCopyToClipboard)
+            {
+                System.Windows.Clipboard.SetText($"{pixelColor.R},{pixelColor.G},{pixelColor.B}");
+            }
+            if (stgsApp.IsGetMessage)
+            {
+                new MessageBoxWindow(pixelColor).Show();
+            }
+            
+        }
+        /// <summary>
+        /// Устанавливает настройки в ходе выполнения программы
+        /// </summary>
+        private void UpdateSettings(object sender, EventArgs e)
+        {
+            BM = new Bitmap(Convert.ToInt32(Screen.PrimaryScreen.Bounds.Width * stgsApp.Zoom), Convert.ToInt32(Screen.PrimaryScreen.Bounds.Height * stgsApp.Zoom));
         }
 
-        BitmapImage BitmapToImageSource(Bitmap bitmap)
+        private void StartApplication(object sender, EventArgs e)
         {
-            using (MemoryStream memory = new MemoryStream())
-            {
-                bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
-                memory.Position = 0;
-                BitmapImage bitmapimage = new BitmapImage();
-                bitmapimage.BeginInit();
-                bitmapimage.StreamSource = memory;
-                bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
-                bitmapimage.EndInit();
-                return bitmapimage;
-            }
+            this.Visibility = Visibility.Visible;
+            MouseHook.Start();
+        }
+
+        private void StopApplication(object sender, EventArgs e)
+        {
+            this.Visibility = Visibility.Hidden;
+            MouseHook.Stop();
         }
 
         public MainWindow()
         {
             InitializeComponent();
-            MouseHook.Start();
+            AppLoad();
+
+        }
+        public void AppLoad()
+        {
+            stgsApp = new SettingsApplication();
+            stgsApp.GetSettings();
+            stgsApp.PropertyChanged += UpdateSettings;
+            BM = new Bitmap(Convert.ToInt32(Screen.PrimaryScreen.Bounds.Width * stgsApp.Zoom), Convert.ToInt32(Screen.PrimaryScreen.Bounds.Height * stgsApp.Zoom));
+            
             MouseHook.MouseMove += WindowMoveToCursor;
             MouseHook.MouseLClick += IsMouseLClick;
+            KeyboardHook.Start();
+            KeyboardHook.KeyboardStartApplication += StartApplication;
+            KeyboardHook.KeyboardStopApplication += StopApplication;
+            stgsAppWindow = new SettingsWindow(stgsApp);
+            stgsAppWindow.Visibility = Visibility.Visible;
         }
-        
-
-
 
     }
     

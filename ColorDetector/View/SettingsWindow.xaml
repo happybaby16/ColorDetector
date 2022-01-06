@@ -1,0 +1,55 @@
+﻿<Window x:Class="ColorDetector.View.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ColorDetector.View"
+        mc:Ignorable="d"
+        Height="170" Width="300"
+        Topmost="True"
+        WindowStyle="None" ResizeMode="NoResize"
+        Background="White"
+        Loaded="Window_Loaded"
+        Visibility="Hidden">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"></RowDefinition>
+            <RowDefinition Height="10*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10*"></ColumnDefinition>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <TextBlock Text="ColorDetector`s settings" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock.Foreground>
+                <LinearGradientBrush>
+                    <GradientStop Color="Blue" Offset="0.1" />
+                    <GradientStop Color="BlueViolet" Offset="1" />
+                </LinearGradientBrush>
+            </TextBlock.Foreground>
+        </TextBlock>
+        <Rectangle Grid.Column="1" Grid.RowSpan="2">
+            <Rectangle.Fill>
+                <LinearGradientBrush>
+                    <GradientStop Color="Aqua" Offset="0.1" />
+                    <GradientStop Color="BlueViolet" Offset="1" />
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+
+
+        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center">
+            <TextBlock Text="Zoom" Margin="2"/>
+            <Slider x:Name="sldZoom" Value="{Binding Path=Zoom, UpdateSourceTrigger=PropertyChanged}" Minimum="0.001" Maximum="0.01" Height="20" SmallChange="0.001" Margin="2"></Slider>
+            <GroupBox Header="Message params" Margin="2">
+                <StackPanel Orientation="Vertical">
+                    <CheckBox Content="Get message about detected color" IsChecked="{Binding Path=IsGetMessage}"/>
+                    <CheckBox Content="Copy color in clipboard" IsChecked="{Binding Path=IsCopyToClipboard}"/>
+                </StackPanel>
+            </GroupBox>
+            <Button x:Name="btnSaveSettings" Content="Save" Background="White" Margin="2" Click="btnSaveSettings_Click"></Button>
+        </StackPanel>
+        
+    </Grid>
+</Window>

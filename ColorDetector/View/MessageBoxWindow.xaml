@@ -1,0 +1,39 @@
+﻿<Window x:Class="ColorDetector.View.MessageBoxWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ColorDetector.View"
+        mc:Ignorable="d"
+        Height="100" Width="250"
+        Topmost="True"
+        WindowStyle="None" ResizeMode="NoResize"
+        Background="White"
+        MouseDown="Window_MouseDown"
+        Loaded="Window_Loaded"
+        >
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+        <TextBlock Text="Selected color:" TextAlignment="Center"/>
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="R: " HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                <TextBlock Text="{Binding Path=R}" TextAlignment="Center" VerticalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="G: " HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                <TextBlock Text="{Binding Path=G}" TextAlignment="Center" VerticalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="B: " HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                <TextBlock Text="{Binding Path=B}" TextAlignment="Center" VerticalAlignment="Center"/>
+            </StackPanel>
+        </StackPanel>
+        </StackPanel>
+        <Rectangle x:Name="rctColor" Grid.Column="1" Grid.Row="0"></Rectangle>
+    </Grid>
+</Window>

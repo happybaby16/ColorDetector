@@ -24,10 +24,6 @@ namespace ColorDetector
         {
             POINT lpPoint;
             GetCursorPos(out lpPoint);
-            // NOTE: If you need error handling
-            // bool success = GetCursorPos(out lpPoint);
-            // if (!success)
-
             return lpPoint;
         }
     }

@@ -11,10 +11,8 @@ namespace ColorDetector.Model
         public static void Start()
         {
             _hookID = SetHook(_proc);
-
-
         }
-        public static void stop()
+        public static void Stop()
         {
             UnhookWindowsHookEx(_hookID);
         }

@@ -5,13 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ColorDetector"
         mc:Ignorable="d"
+        Name="mainWindow"
         Title="MainWindow" Height="150" Width="150"
         Topmost="True"
-        WindowStyle="None" ResizeMode="NoResize">
+        WindowStyle="None" ResizeMode="NoResize"
+        Visibility="Hidden"
+        >
     <Grid>
         <Image x:Name="imgPixcelColor" Stretch="Fill"/>
         <Line X1="0" X2="150" Y1="75" Y2="75" Visibility="Visible" StrokeThickness="1" Stroke="Blue"/>
         <Line Y1="0" Y2="150" X1="75" X2="75" Visibility="Visible" StrokeThickness="1" Stroke="Red"></Line>
-        <Rectangle x:Name="rctEndColor" Fill="Red" Width="40" Height="40" Margin="110,110,0,0" />
+        <Rectangle x:Name="rctEndColor" Fill="Red" Width="40" Height="40" Margin="111,111,0,0" StrokeThickness="1" Stroke="White"/>
     </Grid>
 </Window>
