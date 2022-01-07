@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Windows;
 
 namespace ColorDetector.Model
 {
@@ -9,6 +10,7 @@ namespace ColorDetector.Model
         private static bool IsAppStart { get; set; } = false;//Свойство, которое показывает запущено ли приложение
         public static event EventHandler KeyboardStartApplication = delegate { };//Приложение будет запускаться по сочетанию клавиш CTRL+SHIFT+c
         public static event EventHandler KeyboardStopApplication = delegate { };//Приложение будет останавливаться по сочетанию клавиш CTRL+SHIFT+c
+        public static event DependencyPropertyChangedEventHandler KeyboardShowMenu = delegate { };//Приложение будет запускаться по сочетанию клавиш CTRL+SHIFT+c
         private const int WH_KEYBOARD_LL = 13;//Код хука
         private const int WM_KEYDOWN = 0x0100;//Код нажатия клавиши
         private const int VK_SHIFT = 0X10;//Виртуальная клавиша шифта
@@ -59,6 +61,10 @@ namespace ColorDetector.Model
                         IsAppStart = false;
                     }
                     
+                }
+                if (GetKeyState(VK_SHIFT) & GetKeyState(VK_CONTROL) & vkCode == 77)
+                {
+                    KeyboardShowMenu(null, new DependencyPropertyChangedEventArgs());
                 }
             }
             return CallNextHookEx(_hookID, nCode, wParam, lParam);

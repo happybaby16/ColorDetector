@@ -96,7 +96,6 @@ namespace ColorDetector
         {
             InitializeComponent();
             AppLoad();
-
         }
         public void AppLoad()
         {
@@ -105,13 +104,15 @@ namespace ColorDetector
             stgsApp.PropertyChanged += UpdateSettings;
             BM = new Bitmap(Convert.ToInt32(Screen.PrimaryScreen.Bounds.Width * stgsApp.Zoom), Convert.ToInt32(Screen.PrimaryScreen.Bounds.Height * stgsApp.Zoom));
             
+            stgsAppWindow = new SettingsWindow(stgsApp);
+            stgsAppWindow.Visibility = Visibility.Visible;
+
             MouseHook.MouseMove += WindowMoveToCursor;
             MouseHook.MouseLClick += IsMouseLClick;
             KeyboardHook.Start();
             KeyboardHook.KeyboardStartApplication += StartApplication;
             KeyboardHook.KeyboardStopApplication += StopApplication;
-            stgsAppWindow = new SettingsWindow(stgsApp);
-            stgsAppWindow.Visibility = Visibility.Visible;
+            KeyboardHook.KeyboardShowMenu += stgsAppWindow.DrawMenuSettings;
         }
 
     }

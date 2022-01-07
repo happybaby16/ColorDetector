@@ -9,7 +9,6 @@
         Topmost="True"
         WindowStyle="None" ResizeMode="NoResize"
         Background="White"
-        Loaded="Window_Loaded"
         Visibility="Hidden">
 
     <Grid>
